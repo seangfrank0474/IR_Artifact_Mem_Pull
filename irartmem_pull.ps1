@@ -1,10 +1,12 @@
-﻿$url_source = @("https://github.com/seangfrank0474/IR_Artifact_Report_MemAquisition/archive/refs/heads/main.zip")
+$url_source = @("https://github.com/seangfrank0474/IR_Artifact_Report_MemAquisition/archive/refs/heads/main.zip")
 $pull_to_dir = $env:TEMP + "\irts" 
 if (!(Test-Path -Path $pull_to_dir)){
     New-Item -ItemType directory -Path $pull_to_dir
     $screen_output = "[+] {0} IR Triage and Acquisition script path has been setup. Path: {1}" -f $(get-date -UFormat "%Y-%m-%dT%H:%M:%S"), $pull_to_dir
     Write-Output $screen_output
             }
+
+Set-Location $pull_to_dir
  
 Foreach ($url_line in $url_source) {
     $file_split = $url_line -split "/"
