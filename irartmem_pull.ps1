@@ -1,10 +1,18 @@
 $url_source = @("https://github.com/seangfrank0474/IR_Artifact_Report_MemAquisition/archive/refs/heads/main.zip")
 $pull_to_dir = $env:TEMP + "\irts" 
-if (!(Test-Path -Path $pull_to_dir)){
-    New-Item -ItemType directory -Path $pull_to_dir
-    $screen_output = "[+] {0} IR Triage and Acquisition script path has been setup. Path: {1}" -f $(get-date -UFormat "%Y-%m-%dT%H:%M:%S"), $pull_to_dir
-    Write-Output $screen_output
-            }
+
+switch (Test-Path -Path $pull_to_dir) {
+    $true { 
+        Get-ChildItem $pull_to_dir -Recurse | Remove-Item -Force
+        $screen_output = "[+] {0} IR Triage and Acquisition script path exist and removing possible older directories and scripts. Path: {1}" -f $(get-date -UFormat "%Y-%m-%dT%H:%M:%S"), $pull_to_dir
+        Write-Output $screen_output
+        }
+    $false { 
+        New-Item -ItemType directory -Path $pull_to_dir
+        $screen_output = "[+] {0} IR Triage and Acquisition script path has been setup. Path: {1}" -f $(get-date -UFormat "%Y-%m-%dT%H:%M:%S"), $pull_to_dir
+        Write-Output $screen_output
+        }
+}
 
 Set-Location $pull_to_dir
  
@@ -20,6 +28,7 @@ Foreach ($url_line in $url_source) {
         }
     }
 }
+
 Expand-Archive -LiteralPath $file_dest -DestinationPath $pull_to_dir
 $screen_output = "[+] {0} IR Artifact Report and Memory Aquisition has been downloaded. Script Path: {1}" -f $(get-date -UFormat "%Y-%m-%dT%H:%M:%S"), $pull_to_dir
 Write-Output $screen_output
